@@ -14,7 +14,7 @@ const Router = () => {
         <BrowserRouter>
             <App>
                 <Switch>
-                    <Route exact path='/termo' component={Termo} />
+                    <Route exact path='/' component={Termo} />
                     <Route exact path='/dueto' component={Dueto} />
                     <Route exact path='/quarteto' component={Quarteto} />
                 </Switch>

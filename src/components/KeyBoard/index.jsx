@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 
-import LetterButton from '../LetterButton';
+import KeyBoardLetter from './KeyBoardLetter';
 
 
 const useStyles = makeStyles((theme) => {
@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-const KeyBoard = () => {
+const KeyBoard = ({
+    currentPage,
+    awnsers,
+    tries
+}) => {
     const classes = useStyles();
 
     const keyboard = useMemo(() => {
@@ -24,7 +28,7 @@ const KeyBoard = () => {
             ['a' ,'s' ,'d' ,'f' ,'g' ,'h' ,'j' ,'k' ,'l', 'backspace'],
             ['z' ,'x' ,'c' ,'v' ,'b' ,'n' ,'m', 'enter']
         ]
-    }, [])
+    }, []);
 
     return (
         <Container
@@ -39,19 +43,39 @@ const KeyBoard = () => {
                     >
                         {line.map((letter) => {
                             if (letter === 'backspace') {
-                                return (<LetterButton key={letter} margin={"3px 6px 3px 20px"}>
+                                return (
+                                <KeyBoardLetter 
+                                    key={letter}
+                                    awnsers={awnsers}
+                                    tries={tries}
+                                    currentPage={currentPage}
+                                    margin={"3px 6px 3px 20px"}
+                                >
                                     <BackspaceOutlinedIcon />
-                                </LetterButton>);
+                                </KeyBoardLetter>);
                             }
                             if (letter === 'enter') {
-                                return (<LetterButton key={letter} margin={"3px 6px 3px 20px"} padding="10px 20px">
+                                return (
+                                <KeyBoardLetter 
+                                    key={letter}
+                                    awnsers={awnsers}
+                                    tries={tries}
+                                    currentPage={currentPage}
+                                    margin={"3px 6px 3px 20px"} 
+                                    padding="10px 20px"
+                                >
                                     {letter}
-                                </LetterButton>);
+                                </KeyBoardLetter>);
                             }
                             return (
-                            <LetterButton key={letter}>
+                            <KeyBoardLetter 
+                                key={letter}
+                                awnsers={awnsers}
+                                tries={tries}
+                                currentPage={currentPage}
+                            >
                                 {letter}
-                            </LetterButton>
+                            </KeyBoardLetter>
                             );
                         })}
                     </Container>

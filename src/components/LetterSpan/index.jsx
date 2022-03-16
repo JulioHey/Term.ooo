@@ -8,7 +8,8 @@ const LetterSpan = ({
     letter = " ",
     status = "none",
     fontSize = "24px",
-    margin = "0 0.50em"
+    margin = "0 0.50em",
+    currentTry = false
 }) => {
     const color = useMemo(() => {
         if (status === "none") {
@@ -42,8 +43,8 @@ const LetterSpan = ({
                 margin: `${margin}`,
                 width: "2em",
                 backgroundColor: color,
-                border: `${fontSize === "24px" ? "3px" : "5px"} solid ${color ? color : "#4c4347"}`,
-                borderBottom: `${fontSize === "24px" ? "3px" : currentIndex ? "10px" : "5px"} solid ${color ? color : "#4c4347"}`,
+                border: `${fontSize === "24px" ? "3px" : "3px"} solid ${color ? color : "#4c4347"}`,
+                borderBottom: `${fontSize === "24px" ? "3px" : currentIndex && currentTry ? "8px" : "3px"} solid ${color ? color : "#4c4347"}`,
             }}
         >
             {letter.toUpperCase()}

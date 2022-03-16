@@ -14,7 +14,7 @@ const LinkForOtherGame = (props) => {
                 padding: "10px 0",
                 pointerEvents:  props.currentPage === props.children ? "none" : "initial",
             }}
-            to={`/${props.children}`}
+            to={`/${props.children === "termo" ? "" : props.children}`}
         >
             <Typography
                 variant="h5"

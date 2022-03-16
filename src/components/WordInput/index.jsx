@@ -26,9 +26,10 @@ const WordInput = (props) => {
                 return (<LetterSpan
                     key = {index}
                     letter = {letter}
+                    currentTry = {props.currentTry}
                     status = {props.lettersStatus[index]}
-                    fontSize = "35px"
-                    margin = "4px"
+                    fontSize = "25px"
+                    margin = "2px"
                     currentIndex = {props.currentIndex === index}
                     onClick = {() => props.setCurrentIndex(index)}
                 />)
