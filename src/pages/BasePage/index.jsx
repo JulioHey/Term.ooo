@@ -60,7 +60,7 @@ const BasePage = ({
         setTimeout(() => {
             event.target.focus();
         }, 0);
-    })
+    }, [])
 
     const handleKeyDown = useCallback((event) => {
         if (!letters.includes(event.key)) return;
@@ -87,6 +87,7 @@ const BasePage = ({
         setCurrentTry(newCurrentTry);
         setGamesStatus(newGamesStatus);
     }, [
+        letters,
         currentInput,
         tries,
         currentIndex,
@@ -133,7 +134,11 @@ const BasePage = ({
             console.log("PORRA");
 
         }
-    }, [gamesStatus]);
+    }, [
+        gamesStatus,
+        awnsers.length,
+        numberOfTries
+    ]);
 
 
     return (

@@ -15,7 +15,10 @@ const KeyBoardLetter = ({
     awnsers,
     currentPage,
     children = "A",
-    margin = "1px",
+    margin = "2px 2px",
+    width = "20px",
+    height = "20px",
+    fontSize = "24px"
 }) => {
     const constructBackgrounds = useMemo(() => {
 
@@ -48,14 +51,20 @@ const KeyBoardLetter = ({
             display="flex"
             m={margin}
             maxHeight="64px"
+            width = {width}
+            height = {height}
+            borderRadius = "10%"
             style={{
                 background: constructBackgrounds
             }}
         >
             <Typography
                 color="#FAFAFF"
+                margin={"auto"}
+                fontSize = {fontSize}
+                fontWeight = {500}
             >
-                {children}
+                {typeof(children) === "string" ? children.toUpperCase() : children}
             </Typography>
         </Box>
 

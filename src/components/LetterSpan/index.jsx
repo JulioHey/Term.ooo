@@ -3,13 +3,13 @@ import { Typography } from '@mui/material';
 
 
 const LetterSpan = ({
+    currentPage = "",
     onClick = () => {},
     currentIndex = false,
     letter = " ",
     status = "none",
-    fontSize = "24px",
     margin = "0 0.50em",
-    currentTry = false
+    currentTry = false,
 }) => {
     const color = useMemo(() => {
         if (status === "none") {
@@ -31,20 +31,21 @@ const LetterSpan = ({
         <Typography
             onClick={onClick}
             variant="body1"
-            fontSize={fontSize}
+            fontSize = {currentPage === "quarteto" ? "20px" : "35px"}
+            fontWeight={600}
             color="#FAFAFF"
             style={{
                 alignItems: "center",
                 borderRadius: "10%",
                 display: "inline-flex",
                 fontWeight: "500",
-                height: "2em",
+                height: `${currentPage === "quarteto" ? "35px" : "50px"}`,
                 justifyContent: "center",
                 margin: `${margin}`,
-                width: "2em",
+                width: `${currentPage === "quarteto" ? "35px" : "50px"}`,
                 backgroundColor: color,
-                border: `${fontSize === "24px" ? "3px" : "3px"} solid ${color ? color : "#4c4347"}`,
-                borderBottom: `${fontSize === "24px" ? "3px" : currentIndex && currentTry ? "8px" : "3px"} solid ${color ? color : "#4c4347"}`,
+                border: `${currentPage === "quarteto" ? "3px" : "4px"} solid ${color ? color : "#4c4347"}`,
+                borderBottom: `${currentIndex && currentTry ? "8px" : "4px"} solid ${color ? color : "#4c4347"}`,
             }}
         >
             {letter.toUpperCase()}

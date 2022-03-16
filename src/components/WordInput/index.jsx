@@ -24,11 +24,11 @@ const WordInput = (props) => {
         >
             {props.wordInput.map((letter, index) => {
                 return (<LetterSpan
+                    currentPage={props.currentPage}
                     key = {index}
                     letter = {letter}
                     currentTry = {props.currentTry}
                     status = {props.lettersStatus[index]}
-                    fontSize = "25px"
                     margin = "2px"
                     currentIndex = {props.currentIndex === index}
                     onClick = {() => props.setCurrentIndex(index)}

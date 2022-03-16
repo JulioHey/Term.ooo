@@ -66,6 +66,7 @@ const Game = ({
                         lettersStatus={["disabled","disabled","disabled","disabled","disabled"]}
                         currentIndex={false}
                         setCurrentIndex={() => {}}
+                        currentPage={tries.length === 10 ? "quarteto" : ""}
                     />);
                 }
                 else if (numberOfCurrentTry > index) {
@@ -75,7 +76,8 @@ const Game = ({
                             wordInput={currentTry}
                             lettersStatus={getWordInputPattern(currentTry)}
                             currentIndex={currentIndex}
-                            setCurrentIndex={setCurrentIndex}
+                            setCurrentIndex={() => {}}
+                            currentPage={tries.length === 10 ? "quarteto" : ""}
                         />);
                 }
                 if (numberOfCurrentTry === index) {
@@ -87,6 +89,7 @@ const Game = ({
                             currentIndex={currentIndex}
                             setCurrentIndex={setCurrentIndex}
                             currentTry = {true}
+                            currentPage={tries.length === 10 ? "quarteto" : ""}
                         />);
                 }
                 return (
@@ -96,6 +99,7 @@ const Game = ({
                         lettersStatus={patterns[index]}
                         currentIndex={false}
                         setCurrentIndex={() => { }}
+                        currentPage={tries.length === 10 ? "quarteto" : ""}
                     />);
             }) : ""}
         </Container>
