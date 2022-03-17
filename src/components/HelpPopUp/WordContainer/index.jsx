@@ -24,7 +24,8 @@ const WordContainer = (props) => {
         >
             {(props.word).split("").map((letter) => {
                 return (
-                    <LetterSpan 
+                    <LetterSpan
+                        key = {letter}
                         letter={letter}
                         status={(letter === props.letter) ? props.status : "none"}
                     />

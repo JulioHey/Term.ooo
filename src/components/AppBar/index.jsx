@@ -17,6 +17,7 @@ import arrow from '../../assets/images/arrow_up.svg'
 import LinkForOtherGame from './LinkForOtherGame';
 import AppBarIconButton from './AppBarIconButton';
 import HelpPopUp from '../HelpPopUp';
+import StatsPopUp from '../StatscPopUp';
 
 
 const useStyles = makeStyles((theme) => {
@@ -143,7 +144,7 @@ const TermAppBar = (props) => {
                     </AppBarIconButton>
                     <AppBarIconButton 
                         style={ classes.buttonBorder}
-                        onClick={() => setShowDialog(true)}
+                        onClick={() => setShowDialog("help")}
                     >
                         ?
                     </AppBarIconButton>
@@ -163,7 +164,7 @@ const TermAppBar = (props) => {
                     </AppBarIconButton>
                     <AppBarIconButton 
                         style={ classes.buttonIconBorder}
-                        onClick={() => {}}
+                        onClick={() => setShowDialog("stats")}
                     >
                         <SignalCellularAltRoundedIcon />
                     </AppBarIconButton>
@@ -181,11 +182,20 @@ const TermAppBar = (props) => {
         showAppBar,
     ]);
 
-    const Dialog = useMemo(() => {
+    const HelpDialog = useMemo(() => {
         return (
          <HelpPopUp 
-            open={showDialog}
-            handleClose={() => setShowDialog(false)}
+            open={showDialog === "help"}
+            handleClose={() => setShowDialog("false")}
+         />
+        )
+    }, [showDialog, setShowDialog]);
+
+    const StatsDialog = useMemo(() => {
+        return (
+         <StatsPopUp
+            open={showDialog === "stats"}
+            handleClose={() => setShowDialog("false")}
          />
         )
     }, [showDialog, setShowDialog]);
@@ -197,7 +207,8 @@ const TermAppBar = (props) => {
                 root: classes.container
             }}
         >
-            {Dialog}
+            {HelpDialog}
+            {StatsDialog}
             {AppBarTop}
             {AppBarBottom}
         </Container>

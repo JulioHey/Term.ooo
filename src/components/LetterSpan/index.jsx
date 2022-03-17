@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 
 const LetterSpan = ({
@@ -28,9 +28,9 @@ const LetterSpan = ({
     ]);
 
     return (
-        <Typography
+        <Box
+            component={"span"}
             onClick={onClick}
-            variant="body1"
             fontSize = {currentPage === "quarteto" ? "20px" : "35px"}
             fontWeight={600}
             color="#FAFAFF"
@@ -49,7 +49,7 @@ const LetterSpan = ({
             }}
         >
             {letter.toUpperCase()}
-        </Typography>
+        </Box>
     )
 }
 
