@@ -36,7 +36,7 @@ class CreatePattern {
             {
                 const indexAchado = this.correct.indexOf(this.attempt[index])
                 if (!this.correctIndexes.includes(indexAchado)) this.pattern[index] = 'Y'
-                this.correct.splice(indexAchado, indexAchado)
+                this.correct.splice(indexAchado, 1);
             }
         }
     }

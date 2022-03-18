@@ -5,6 +5,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 
 import KeyBoardLetter from './KeyBoardLetter';
 import KeyBoardStylesConstructor from './stylesConstructor';
+import { useGameContext } from '../../contexts/gameContext';
 
 
 const useStyles = makeStyles((theme) => {
@@ -20,33 +21,27 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-const KeyBoard = ({
-    currentPage,
-    awnsers,
-    tries
-}) => {
+const KeyBoard = () => {
     const classes = useStyles();
+    const [state] = useGameContext();
 
-    const [keyBoardStylesConstructor] = useState(new KeyBoardStylesConstructor(currentPage));
+    const [keyBoardStylesConstructor] = useState(new KeyBoardStylesConstructor(state.currentPage));
 
     const keyLetterStyles = useMemo(() => {
         return keyBoardStylesConstructor.stylesLettersForCurrentPage();
     }, [
-        currentPage, 
         keyBoardStylesConstructor
     ]);
 
     const backspaceStyles = useMemo(() => {
         return keyBoardStylesConstructor.stylesBackspaceForCurrentPage();
     }, [
-        currentPage, 
         keyBoardStylesConstructor
     ]);
 
     const enterStyles = useMemo(() => {
         return keyBoardStylesConstructor.stylesEnterForCurrentPage();
     }, [
-        currentPage, 
         keyBoardStylesConstructor
     ]);
 
@@ -77,9 +72,6 @@ const KeyBoard = ({
                                 return (
                                 <KeyBoardLetter 
                                     key={letter}
-                                    awnsers={awnsers}
-                                    tries={tries}
-                                    currentPage={currentPage}
                                     width = {backspaceStyles.width}
                                     height = {backspaceStyles.height}
                                     fontSize = {backspaceStyles.fontSize}
@@ -92,9 +84,6 @@ const KeyBoard = ({
                                 return (
                                 <KeyBoardLetter 
                                     key={letter}
-                                    awnsers={awnsers}
-                                    tries={tries}
-                                    currentPage={currentPage}
                                     width = {enterStyles.width}
                                     height = {enterStyles.height}
                                     fontSize = {enterStyles.fontSize}
@@ -106,9 +95,6 @@ const KeyBoard = ({
                             return (
                             <KeyBoardLetter 
                                 key={letter}
-                                awnsers={awnsers}
-                                tries={tries}
-                                currentPage={currentPage}
                                 width = {keyLetterStyles.width}
                                 height = {keyLetterStyles.height}
                                 fontSize = {keyLetterStyles.fontSize}

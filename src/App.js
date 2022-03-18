@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { StatsContextProvider } from './contexts/statsController';
 
 const theme = createTheme({
   palette: {

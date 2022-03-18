@@ -13,7 +13,11 @@ const useStyles = makeStyles((theme) => {
     }
 });
 
-const WordInput = (props) => {
+const WordInput = ({
+    wordInput,
+    wordIndex,
+    lettersStatus,
+}) => {
     const classes = useStyles();
 
     return (
@@ -22,16 +26,14 @@ const WordInput = (props) => {
                 root: classes.wordContainer
             }}
         >
-            {props.wordInput.map((letter, index) => {
+            {wordInput.map((letter, index) => {
                 return (<LetterSpan
-                    currentPage={props.currentPage}
                     key = {index}
+                    letterIndex = {index}
+                    wordIndex = {wordIndex}
                     letter = {letter}
-                    currentTry = {props.currentTry}
-                    status = {props.lettersStatus[index]}
+                    status = {lettersStatus[index]}
                     margin = "2px"
-                    currentIndex = {props.currentIndex === index}
-                    onClick = {() => props.setCurrentIndex(index)}
                 />)
             })}
         </Container>

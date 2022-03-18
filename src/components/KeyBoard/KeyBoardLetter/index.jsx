@@ -8,27 +8,26 @@ import {
 } from '@mui/material';
 
 import BackgroundConstructor from './backgroundConstructor';
+import { useGameContext } from '../../../contexts/gameContext';
 
 
 const KeyBoardLetter = ({
-    tries,
-    awnsers,
-    currentPage,
     children = "A",
     margin = "2px 2px",
     width = "20px",
     height = "20px",
     fontSize = "24px"
 }) => {
-    const constructBackgrounds = useMemo(() => {
+    const [state, actions] = useGameContext();
 
+    const constructBackgrounds = useMemo(() => {
         let backgroundConstructor = new BackgroundConstructor(
             children,
-            awnsers,
-            tries
+            state.awnsers,
+            state.tries
         );
 
-        switch (currentPage) {
+        switch (state.currentPage) {
             case "termo":
                 return backgroundConstructor.termoBackgrounds();
             case "dueto":
@@ -39,11 +38,11 @@ const KeyBoardLetter = ({
                 break;
         }
     }, [
-        currentPage,
+        state.currentPage,
         children,
-        tries,
-        JSON.stringify(tries),
-        awnsers
+        state.currentTry,
+        state.awnsers,
+        state.tries
     ]);
 
     return (

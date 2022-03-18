@@ -1,6 +1,7 @@
 import { Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useGameContext } from '../../contexts/gameContext';
 import { CreatePattern, patternMap } from '../../utils/pattern';
 import WordInput from '../WordInput';
 
@@ -15,27 +16,24 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Game = ({
-    tries,
-    numberOfCurrentTry,
-    currentIndex,
-    setCurrentIndex,
-    currentInput,
     awnser,
     winIndex
 }) => {
+    const [state] = useGameContext();
+
     const classes = useStyles();
     const [patterns, setPatterns] = useState([]);
 
     const generateInitialPatterns = useCallback(() => {
         var initialPatterns = [];
 
-        tries.forEach(() => {
+        state.tries.forEach(() => {
             initialPatterns.push(["disabled", "disabled", "disabled", "disabled", "disabled"])
         });
 
         setPatterns(initialPatterns);
     }, [
-        tries
+        state.tries
     ])
 
     useEffect(() => {
@@ -58,48 +56,40 @@ const Game = ({
                 root: classes.gameContainer
             }}
         >
-            {patterns.length ? tries.map((currentTry, index) => {
+            {patterns.length ? state.tries.map((currentTry, index) => {
+                
                 if (index > winIndex) {
                     return (<WordInput
                         key={index}
                         wordInput={["","","","",""]}
                         lettersStatus={["disabled","disabled","disabled","disabled","disabled"]}
-                        currentIndex={false}
-                        setCurrentIndex={() => {}}
-                        currentPage={tries.length === 10 ? "quarteto" : ""}
+                        wordIndex={index}
                     />);
                 }
-                else if (numberOfCurrentTry > index) {
+                else if (state.currentTry > index) {
                     return (
                         <WordInput
                             key={index}
                             wordInput={currentTry}
+                            wordIndex={index}
                             lettersStatus={getWordInputPattern(currentTry)}
-                            currentIndex={currentIndex}
-                            setCurrentIndex={() => {}}
-                            currentPage={tries.length === 10 ? "quarteto" : ""}
                         />);
                 }
-                if (numberOfCurrentTry === index) {
+                if (state.currentTry === index) {
                     return (
                         <WordInput
                             key={index}
-                            wordInput={currentInput}
+                            wordInput={state.currentInput}
+                            wordIndex={index}
                             lettersStatus={["none", "none", "none", "none", "none"]}
-                            currentIndex={currentIndex}
-                            setCurrentIndex={setCurrentIndex}
-                            currentTry = {true}
-                            currentPage={tries.length === 10 ? "quarteto" : ""}
                         />);
                 }
                 return (
                     <WordInput
                         key={index}
                         wordInput={currentTry}
+                        wordIndex={index}
                         lettersStatus={patterns[index]}
-                        currentIndex={false}
-                        setCurrentIndex={() => { }}
-                        currentPage={tries.length === 10 ? "quarteto" : ""}
                     />);
             }) : ""}
         </Container>

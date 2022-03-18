@@ -78,7 +78,7 @@ const StatsHistgram = ({
         >
             {histogram.map((e, index) => (
                 <HistogramBar key ={index} trys = {index + 1} value = {e} sizePercentage = {e/games} />))}
-            <HistogramBar trys = {<>💀</>} value={histogram.reduce((sum, value) => sum += value) - games} sizePercentage = {(histogram.reduce((sum, value) => sum += value) - games) / games}/>
+            <HistogramBar trys = {<>💀</>} value={games - histogram.reduce((sum, value) => sum += value)} sizePercentage = {(histogram.reduce((sum, value) => sum += value) - games) / games}/>
         </Container>
     )
 }

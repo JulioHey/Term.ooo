@@ -1,16 +1,17 @@
-import React, { useMemo } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { Box } from '@mui/material';
+import { useGameContext } from '../../contexts/gameContext';
 
 
 const LetterSpan = ({
-    currentPage = "",
-    onClick = () => {},
-    currentIndex = false,
-    letter = " ",
+    letterIndex,
+    wordIndex,
+    letter = "",
     status = "none",
     margin = "0 0.50em",
-    currentTry = false,
 }) => {
+    const [state, actions] = useGameContext();
+
     const color = useMemo(() => {
         if (status === "none") {
             return "";
@@ -27,11 +28,23 @@ const LetterSpan = ({
         status,
     ]);
 
+    const handleClick = useCallback(() => {
+        if (state.currentTry === wordIndex)
+        {
+            actions.setCurrentIndex({currentIndex: letterIndex});
+        }
+    }, [
+        state.currentTry,
+        wordIndex,
+        letterIndex,
+        actions
+    ])
+
     return (
         <Box
             component={"span"}
-            onClick={onClick}
-            fontSize = {currentPage === "quarteto" ? "20px" : "35px"}
+            onClick={handleClick}
+            fontSize = {state.tries.length === 10 ? "20px" : "35px"}
             fontWeight={600}
             color="#FAFAFF"
             style={{
@@ -39,13 +52,13 @@ const LetterSpan = ({
                 borderRadius: "10%",
                 display: "inline-flex",
                 fontWeight: "500",
-                height: `${currentPage === "quarteto" ? "35px" : "50px"}`,
+                height: `${state.tries.length === 10 ? "35px" : "50px"}`,
                 justifyContent: "center",
                 margin: `${margin}`,
-                width: `${currentPage === "quarteto" ? "35px" : "50px"}`,
+                width: `${state.tries.length === 10 ? "35px" : "50px"}`,
                 backgroundColor: color,
-                border: `${currentPage === "quarteto" ? "3px" : "4px"} solid ${color ? color : "#4c4347"}`,
-                borderBottom: `${currentIndex && currentTry ? "8px" : "4px"} solid ${color ? color : "#4c4347"}`,
+                border: `${state.tries.length === 10 ? "3px" : "4px"} solid ${color ? color : "#4c4347"}`,
+                borderBottom: `${state.currentIndex === letterIndex && state.currentIndex && state.currentTry === wordIndex ? "8px" : "4px"} solid ${color ? color : "#4c4347"}`,
             }}
         >
             {letter.toUpperCase()}

@@ -1,15 +1,22 @@
 import React from 'react';
+import { GameContextProvider } from '../../contexts/gameContext';
+import { StatsContextProvider } from '../../contexts/statsController';
 import BasePage from '../BasePage';
 
 
 const Quarteto = (props) => {
     return (
-        <BasePage 
-            currentPage="quarteto"
-            awnsers = {["serao", "porra", "carro", "modos"]}
+        <GameContextProvider
             numberOfTries = {10}
+            currentPage="quarteto"
         >
-        </BasePage>
+            <StatsContextProvider
+                currentPage={"quarteto"}
+            >
+                <BasePage />
+            </StatsContextProvider>
+        </GameContextProvider>
+
     );
 }
 

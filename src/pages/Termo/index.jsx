@@ -1,15 +1,22 @@
 import React from 'react';
+import { GameContextProvider } from '../../contexts/gameContext';
+import { StatsContextProvider } from '../../contexts/statsController';
 import BasePage from '../BasePage';
 
 
-const Termo = (props) => {
+const Termo = () => {
     return (
-        <BasePage 
-            currentPage="termo"
-            awnsers = {["serao"]}
+        <GameContextProvider
             numberOfTries = {6}
+            currentPage="termo"
         >
-        </BasePage>
+            <StatsContextProvider
+                currentPage={"termo"}
+            >
+                <BasePage />
+            </StatsContextProvider>
+        </GameContextProvider>
+
     );
 }
 

@@ -4,7 +4,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import TermAppBar from '../../components/AppBar';
 import Game from '../../components/Game';
 import KeyBoard from '../../components/KeyBoard';
-import InputController from './gameController';
+import { useGameContext } from '../../contexts/gameContext';
+import { useStatsContext } from '../../contexts/statsController';
+import { getCurrentDay } from '../../utils/getCurrentDay';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -17,101 +19,69 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-const BasePage = ({
-    currentPage,
-    awnsers,
-    numberOfTries
-}) => {
+const BasePage = () => {
+    const [state, actions] = useGameContext();
+    const [statsState, statsActions] = useStatsContext();
     const classes = useStyles();
 
-    const [currentInput, setCurrentInput] = useState(["", "", "", "", ""])
-    const [tries, setTries] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentTry, setCurrentTry] = useState(0);
-    const [gamesStatus, setGamesStatus] = useState([]);
     const [alerted, setAlerted] = useState(false);
+
+    useEffect(() => {
+        const day = getCurrentDay();
+
+        const oldState = JSON.parse(localStorage.getItem(state.currentPage));
+        const oldStat = JSON.parse(localStorage.getItem(`${state.currentPage}Stats`));
+
+        if (oldState && oldState.currDay && oldState.currDay === day) actions.setState(oldState);
+        if (oldStat) statsActions.setState(oldStat);
+    }, [])
 
     const letters = useMemo(() => {
         return ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
             'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'Backspace',
-            'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Enter'];
+            'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Enter', 'ArrowLeft', 'ArrowRight'];
     }, []);
 
-    const setInitialTries = useCallback(() => {
-        var addingTries = [
-            ["", "", "", "", ""]
-        ];
-
-        for (let index = 1; index < numberOfTries; index++) {
-            addingTries.push(["", "", "", "", ""])
-        }
-
-        setTries(addingTries);
-    }, [
-        numberOfTries
-    ]);
+    const onInputBlur = useCallback((event) => {
+        setTimeout(() => {
+            if (event && event.target) event.target.focus();
+        }, 0);
+    }, []);
 
     useEffect(() => {
-        setInitialTries();
-    }, [setInitialTries]);
-
-    const onInputBlur = useCallback((event) => {
-        // gamesStatus.filter(status => status).length === awnsers.length ?? event.target.focus()
-        setTimeout(() => {
-            event.target.focus();
-        }, 0);
-    }, [])
+        // PERDEU
+        if (state.win === 1)
+        {
+            statsActions.addGame( {currentTry: 100}, statsState);
+        }
+        // GANHO
+        if (state.win === 2)
+        {
+            statsActions.addGame({currentTry: state.currentTry - 1}, statsState);
+        }
+    }, [state.win])
 
     const handleKeyDown = useCallback((event) => {
         if (!letters.includes(event.key)) return;
-        const inputController = new InputController({
-            currentInput,
-            tries,
-            currentIndex,
-            currentTry,
-            gamesStatus,
-            awnsers
-        });
 
-        const {
-            newCurrentInput,
-            newTries,
-            newCurrentIndex,
-            newCurrentTry,
-            newGamesStatus,
-        } = inputController.handleInput(event.key);
+        actions.handleKeyDown(event.key, state);
 
-        setCurrentIndex(newCurrentIndex);
-        setCurrentInput(newCurrentInput);
-        setTries(newTries);
-        setCurrentTry(newCurrentTry);
-        setGamesStatus(newGamesStatus);
     }, [
-        letters,
-        currentInput,
-        tries,
-        currentIndex,
-        currentTry,
-        gamesStatus,
-        awnsers
+        state,
+        actions,
+        letters
     ]);
 
 
     const games = useMemo(() => {
-        if (Object.keys(tries).length) {
+        if (Object.keys(state.tries).length) {
             return (
-                awnsers.map((awnser, index) => {
+                state.awnsers.map((awnser, index) => {
                     return (
                         <Game
                             key={index}
                             awnser={awnser}
-                            tries={tries}
-                            numberOfCurrentTry={currentTry}
-                            currentIndex={currentIndex}
-                            setCurrentIndex={setCurrentIndex}
-                            currentInput={currentInput}
-                            gamesStatus={gamesStatus[index]}
-                            winIndex={gamesStatus[index]}
+                            winIndex={state.gamesStatus[index]}
                         />
                     )
                 })
@@ -119,43 +89,39 @@ const BasePage = ({
         }
         return <></>
     }, [
-        awnsers,
-        currentInput,
-        tries,
-        currentTry,
-        currentIndex,
-        setCurrentIndex,
-        gamesStatus
+        state.currentTry,
+        state.gamesStatus,
+        state.tries,
+        state.awnsers,
     ]);
 
     const alertD = useCallback(() => {
-        if (gamesStatus.filter((x) => x <= numberOfTries).length === awnsers.length) {
+        if (state.gamesStatus.filter((x) => x <= state.numberOfTries).length === state.awnsers.length) {
             setAlerted(true);
-            console.log("PORRA");
 
         }
     }, [
-        gamesStatus,
-        awnsers.length,
-        numberOfTries
+        state.gamesStatus,
+        state.awnsers,
+        state.numberOfTries
     ]);
 
 
     return (
         <>
             <TermAppBar
-                currentPage={currentPage}
+                currentPage={state.currentPage}
             />
             <Input
                 style={{
                     opacity: "0",
                     position: "absolute"
                 }}
-                value={currentInput.join("")}
+                value={state.currentInput.join("")}
                 autoFocus={true}
                 onBlur={(event) => onInputBlur(event)}
                 onKeyDown={(event) => handleKeyDown(event)}
-                disabled={gamesStatus.filter(status => status).length === awnsers.length}
+                disabled={state.gamesStatus.filter(status => status !== 100).length === state.awnsers.length}
             />
             <Container
                 classes={{
@@ -165,11 +131,7 @@ const BasePage = ({
                 {games}
             </Container>
             {!alerted ? alertD() : <></>}
-            <KeyBoard
-                currentPage={currentPage}
-                tries={tries ?? []}
-                awnsers={awnsers}
-            />
+            <KeyBoard />
         </>
     );
 }

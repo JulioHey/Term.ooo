@@ -1,4 +1,5 @@
-import { CreatePattern, patternMap } from "../../utils/pattern";
+import { wordList } from "../utils/wordList";
+import { CreatePattern, patternMap } from "../utils/pattern";
 
 class InputController {
     constructor(
@@ -30,37 +31,64 @@ class InputHandler {
     constructor(args)
     {
         const {
+            win,
+            currDay,
+            currentPage,
             currentInput, 
             tries, 
             currentIndex, 
             currentTry, 
             gamesStatus, 
-            awnsers
+            awnsers,
+            numberOfTries 
         } = args;
 
+        this.win = win; 
+        this.currDay = currDay; 
+        this.currentPage = currentPage; 
         this.currentInput = currentInput; 
         this.tries = tries; 
         this.currentIndex = currentIndex; 
         this.currentTry = currentTry; 
         this.gamesStatus = gamesStatus; 
         this.awnsers = awnsers;
+        this.numberOfTries = numberOfTries;
+    }
+
+    allStates()
+    {
+        return {
+            win: this.win, 
+            currDay: this.currDay, 
+            currentPage: this.currentPage, 
+            currentInput: this.currentInput, 
+            tries: this.tries, 
+            currentIndex: this.currentIndex, 
+            currentTry: this.currentTry, 
+            gamesStatus: this.gamesStatus, 
+            awnsers: this.awnsers,
+            numberOfTries: this.numberOfTries,
+        }
     }
 
     newStates()
     {
         return {
-            newCurrentInput: this.currentInput, 
-            newTries: this.tries, 
-            newCurrentIndex: this.currentIndex, 
-            newCurrentTry: this.currentTry, 
-            newGamesStatus: this.gamesStatus,
+            win: this.win, 
+            currentInput: this.currentInput.slice(0,5), 
+            tries: this.tries, 
+            currentIndex: this.currentIndex, 
+            currentTry: this.currentTry, 
+            gamesStatus: this.gamesStatus,
         }
     }
 
     letterInput = (key) =>
     {
+        if (this.currentIndex === 5) return this.newStates();
         this.currentInput[this.currentIndex] = key;
-        this.currentIndex = (this.currentIndex < 5 ? this.currentIndex + 1 : this.currentIndex);
+        this.currentIndex = this.currentIndex + 1;
+        // this.currentIndex = (this.currentIndex < 5 ? this.currentIndex + 1 : this.currentIndex);
     
         return this.newStates();
     }
@@ -82,7 +110,11 @@ class InputHandler {
 
     Enter() 
     {
-        if (
+        if (!wordList.includes(this.currentInput.join("")))
+        {
+            console.log("OPA NÃO TEMOS ESSA PALAVRA");
+        }
+        else if (
             !this.currentInput.includes("")
         )
         {
@@ -91,11 +123,12 @@ class InputHandler {
                 let wordPattern = this.getWordInputPattern(awnser);
                 
                 this.tries[this.currentTry] = this.currentInput.slice(0, 5);
-                    
+                   
                 if (wordPattern.filter(status => status === "success").length === 5)
                 {
-                    this.gamesStatus[index] = this.currentTry; 
+                    this.gamesStatus[index] = this.currentTry;
                 }
+
                 return;
             });
 
@@ -104,6 +137,18 @@ class InputHandler {
             this.currentIndex = 0;
         }
 
+        if (this.gamesStatus.filter(x => x !== 100).length === this.awnsers.length)
+        {
+            this.win = 2;
+            console.log("PORRA tu conseguiu lindao");
+        }
+        else if (this.numberOfTries === this.currentTry)
+        {
+            this.win = 1;
+            console.log("Infelizmente você não conseguiu as palavras eram: ", this.awnsers);
+        }  
+
+        localStorage.setItem(this.currentPage, JSON.stringify(this.allStates()));
         return this.newStates();
     }
 
